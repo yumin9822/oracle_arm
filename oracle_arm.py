@@ -276,7 +276,8 @@ class InsCreate:
     def check_public_ip(self):
 
         network_client = VirtualNetworkClient(config=dict(self._user))
-        while True:
+        count=100
+        while count:
             attachments = self._client.list_vnic_attachments(
                 compartment_id=self._user.compartment_id(),
                 instance_id=self.ins_id)
@@ -287,9 +288,11 @@ class InsCreate:
                 public_ip = network_client.get_vnic(vnic_id).data.public_ip
                 self.logp("公网ip为:{}\n 🐢脚本停止，感谢使用😄\n".format(public_ip))
                 self.public_ip = public_ip
-                break
+                return 
             time.sleep(5)
-
+            count-=1
+        self.logp("开机失败，被他娘甲骨文给关掉了😠，脚本停止，请重新运行\n".format(public_ip))
+        
     def lunch_instance(self):
         return self._client.launch_instance(
             oci.core.models.LaunchInstanceDetails(
