@@ -291,7 +291,7 @@ class InsCreate:
                 return 
             time.sleep(5)
             count-=1
-        self.logp("开机失败，被他娘甲骨文给关掉了😠，脚本停止，请重新运行\n".format(public_ip))
+        self.logp("开机失败，被他娘甲骨文给关掉了😠，脚本停止，请重新运行\n")
         
     def lunch_instance(self):
         return self._client.launch_instance(
