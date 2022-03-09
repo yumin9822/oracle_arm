@@ -9,9 +9,9 @@ import random
 import base64
 # tg pusher config
 USE_TG = False  # 如果启用tg推送 要设置为True
-TG_BOT_TOKEN = ''  # 通过 @BotFather 申请获得，示例：1077xxx4424:AAFjv0FcqxxxxxxgEMGfi22B4yh15R5uw
-TG_USER_ID = ''  # 用户、群组或频道 ID，示例：129xxx206
-TG_API_HOST = 'api.telegram.org'  # 自建 API 反代地址，供网络环境无法访问时使用，网络正常则保持默认
+TG_BOT_TOKEN = ''  # 通过 @BotFather 申请获得,示例：1077xxx4424:AAFjv0FcqxxxxxxgEMGfi22B4yh15R5uw
+TG_USER_ID = ''  # 用户、群组或频道 ID,示例：129xxx206
+TG_API_HOST = 'api.telegram.org'  # 自建 API 反代地址,供网络环境无法访问时使用,网络正常则保持默认
 
 
 def telegram(desp):
@@ -36,7 +36,7 @@ class OciUser:
     region: str
 
     def __init__(self, configfile="~/.oci/config", profile="DEFAULT"):
-        # todo 用户可以自定义制定config文件地址，暂时懒得写
+        # todo 用户可以自定义制定config文件地址,暂时懒得写
         cfg = oci.config.from_file(file_location=configfile,
                                    profile_name=profile)
         validate_config(cfg)
@@ -196,7 +196,7 @@ class FileParser:
 
 class InsCreate:
     shape = 'VM.Standard.A1.Flex'
-    sleep_time = 5.0
+    sleep_time = 15.0
     try_count = 0
     desp = ""
 
@@ -230,29 +230,29 @@ class InsCreate:
                 ins = self.lunch_instance()  # 应该返回具体的成功的数据
             except oci.exceptions.ServiceError as e:
                 if e.status == 429 and e.code == 'TooManyRequests' and e.message == 'Too many requests for the user':
-                    # 被限速了，改一下时间
-                    print("request too fast，Auto reconfigureing")
+                    # 被限速了,改一下时间
+                    print("request too fast,Auto reconfigureing")
                     if self.sleep_time < 60:
                         self.sleep_time += 10
                 elif not (e.status == 500 and e.code == 'InternalError'
                           and e.message == 'Out of host capacity.'):
                     if "Service limit" in e.message and e.status==400:
 
-                        # 可能是别的错误，也有可能是 达到上限了，要去查看一下是否开通成功，也有可能错误了
+                        # 可能是别的错误,也有可能是 达到上限了,要去查看一下是否开通成功,也有可能错误了
                         self.logp("wrong1:{},\n exting".format(e))
                     else:
                         self.logp("wrong2:{}".format(e))
                     telegram(self.desp)
                     raise e
                 else:
-                    # 没有被限速，恢复减少的时间
+                    # 没有被限速,恢复减少的时间
                     print("No limit, creation in progress")
                     if self.sleep_time > 15:
                         self.sleep_time -= 10
                 print("return:",e)
                 time.sleep(self.sleep_time)
             else:
-                #  开通成功 ，ins 就是返回的数据
+                #  开通成功 ,ins 就是返回的数据
                 #  可以等一会去请求实例的ip
                 # print("Success ins:\n\n", ins, type(ins))
                 self.logp(
@@ -290,7 +290,7 @@ class InsCreate:
                 return 
             time.sleep(5)
             count-=1
-        self.logp("failed to boo up VM，exting\n")
+        self.logp("failed to boo up VM, exting\n")
         
     def lunch_instance(self):
         return self._client.launch_instance(
